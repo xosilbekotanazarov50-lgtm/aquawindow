@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - Aqua Windows Planner</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-md bg-white rounded-xl shadow-lg overflow-hidden animate-fade-in">
+            <div class="bg-blue-600 py-4 px-6">
+                <h1 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <i data-feather="home"></i>
+                    Aqua Windows
+                </h1>
+            </div>
+
+            <div class="p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Создать аккаунт</h2>
+                <p class="text-gray-600 mb-6">Заполните форму для регистрации в системе</p>
+
+                <form id="register-form" class="space-y-4">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Имя</label>
+                        <input type="text" id="name" name="name" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                               placeholder="Иван Иванов">
+                    </div>
+
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Телефон</label>
+                        <input type="tel" id="phone" name="phone" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                               placeholder="+7 (999) 123-45-67">
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Пароль</label>
+                        <input type="password" id="password" name="password" required minlength="6"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                               placeholder="••••••••">
+                        <p class="mt-1 text-xs text-gray-500">Минимум 6 символов</p>
+                    </div>
+
+                    <div>
+                        <label for="confirm-password" class="block text-sm font-medium text-gray-700 mb-1">Подтвердите пароль</label>
+                        <input type="password" id="confirm-password" name="confirm-password" required minlength="6"
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                               placeholder="••••••••">
+                    </div>
+
+                    <div class="flex items-center">
+                        <input id="terms" name="terms" type="checkbox" required
+                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                        <label for="terms" class="ml-2 block text-sm text-gray-700">
+                            Я согласен с <a href="/terms.html" class="text-blue-600 hover:text-blue-800">условиями использования</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium transition flex items-center justify-center gap-2">
+                        <i data-feather="user-plus" class="w-5 h-5"></i>
+                        Зарегистрироваться
+                    </button>
+                </form>
+
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600">Уже есть аккаунт?
+                        <a href="/login.html" class="text-blue-600 font-medium hover:text-blue-800">Войти</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            feather.replace();
+
+            document.getElementById('register-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const name = document.getElementById('name').value;
+                const phone = document.getElementById('phone').value;
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+
+                if (password !== confirmPassword) {
+                    showToast('Пароли не совпадают', 'error');
+                    return;
+                }
+
+                try {
+                    // Здесь должен быть API запрос для регистрации
+                    // const response = await makeApiRequest('auth/register', 'POST', { name, phone, password });
+
+                    // Для демонстрации используем моковые данные
+                    const mockResponse = {
+                        token: 'mock-jwt-token',
+                        role: 'client',
+                        user: {
+                            id: 1,
+                            name: name,
+                            phone: phone
+                        }
+                    };
+
+                    localStorage.setItem('token', mockResponse.token);
+                    localStorage.setItem('role', mockResponse.role);
+                    localStorage.setItem('user', JSON.stringify(mockResponse.user));
+
+                    showToast('Регистрация прошла успешно!', 'success');
+
+                    // Перенаправляем на главную через 1 секунду
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 1000);
+
+                } catch (error) {
+                    showToast('Ошибка регистрации. Попробуйте позже.', 'error');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

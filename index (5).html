@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aqua Windows Planner - Оконный Конструктор</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/konva@8.3.2/konva.min.js"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-cyan-50">
+    <custom-navbar></custom-navbar>
+
+    <main class="container mx-auto px-4 py-8">
+        <section id="hero" class="text-center py-16">
+            <h1 class="text-5xl font-bold text-blue-800 mb-6">Создайте идеальные окна для вашего дома</h1>
+            <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">Интерактивный конструктор окон с 3D визуализацией и профессиональным монтажом</p>
+            <div class="flex justify-center gap-4">
+                <a href="/register.html" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all shadow-lg">Начать проект</a>
+                <a href="/login.html" class="border-2 border-blue-600 text-blue-600 px-6 py-3 rounded-lg font-medium transition-all hover:bg-blue-50">Войти</a>
+            </div>
+        </section>
+
+        <section id="features" class="py-12">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="text-blue-600 mb-4">
+                        <i data-feather="layout" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Конструктор планов</h3>
+                    <p class="text-gray-600">Создайте точный план вашего дома и расставьте окна в 2D/3D редакторе</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="text-blue-600 mb-4">
+                        <i data-feather="box" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Каталог окон</h3>
+                    <p class="text-gray-600">Выберите из 50+ моделей окон с разными материалами и характеристиками</p>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow">
+                    <div class="text-blue-600 mb-4">
+                        <i data-feather="users" class="w-10 h-10"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">Профессиональный монтаж</h3>
+                    <p class="text-gray-600">Наши специалисты установят окна быстро и качественно</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="demo" class="py-12 bg-white rounded-xl shadow-md p-6">
+            <h2 class="text-3xl font-bold text-center mb-8 text-blue-800">Попробуйте наш конструктор</h2>
+            <div id="konva-container" class="border-2 border-gray-200 rounded-lg h-96 w-full"></div>
+            <div class="mt-4 flex justify-center">
+                <button id="add-window-btn" class="bg-blue-600 text-white px-4 py-2 rounded-lg mr-2 flex items-center">
+                    <i data-feather="plus" class="w-4 h-4 mr-2"></i> Добавить окно
+                </button>
+                <button id="clear-btn" class="bg-gray-200 text-gray-800 px-4 py-2 rounded-lg flex items-center">
+                    <i data-feather="trash-2" class="w-4 h-4 mr-2"></i> Очистить
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <custom-footer></custom-footer>
+
+    <script src="components/navbar.js"></script>
+    <script src="components/footer.js"></script>
+    <script src="script.js"></script>
+    <script>
+        feather.replace();
+        // Инициализация Konva.js
+        document.addEventListener('DOMContentLoaded', function() {
+            const width = document.getElementById('konva-container').offsetWidth;
+            const height = 400;
+
+            const stage = new Konva.Stage({
+                container: 'konva-container',
+                width: width,
+                height: height,
+            });
+
+            const layer = new Konva.Layer();
+            stage.add(layer);
+
+            // Создаем стену дома
+            const house = new Konva.Rect({
+                x: width/2 - 150,
+                y: height/2 - 100,
+                width: 300,
+                height: 200,
+                fill: '#f5f5f5',
+                stroke: '#333',
+                strokeWidth: 2,
+                cornerRadius: 10,
+            });
+            layer.add(house);
+
+            document.getElementById('add-window-btn').addEventListener('click', function() {
+                // Добавляем окно
+                const windowObj = new Konva.Rect({
+                    x: width/2 - 120 + Math.random() * 240,
+                    y: height/2 - 80 + Math.random() * 160,
+                    width: 40,
+                    height: 60,
+                    fill: '#a5d8ff',
+                    stroke: '#1864ab',
+                    strokeWidth: 1,
+                    draggable: true,
+                });
+
+                windowObj.on('click', function() {
+                    alert('Вы выбрали окно. Можно изменить размеры и положение.');
+                });
+
+                layer.add(windowObj);
+                layer.draw();
+            });
+
+            document.getElementById('clear-btn').addEventListener('click', function() {
+                layer.children.forEach(child => {
+                    if (child !== house) {
+                        child.destroy();
+                    }
+                });
+                layer.draw();
+            });
+        });
+    </script>
+</body>
+</html>

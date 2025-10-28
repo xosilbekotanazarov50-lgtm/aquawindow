@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход - Aqua Windows Planner</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="w-full max-w-md bg-white rounded-xl shadow-lg overflow-hidden animate-fade-in">
+            <div class="bg-blue-600 py-4 px-6">
+                <h1 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <i data-feather="home"></i>
+                    Aqua Windows
+                </h1>
+            </div>
+
+            <div class="p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">Вход в систему</h2>
+                <p class="text-gray-600 mb-6">Введите ваши данные для входа в личный кабинет</p>
+
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Телефон</label>
+                        <input type="tel" id="phone" name="phone" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                               placeholder="+7 (999) 123-45-67">
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Пароль</label>
+                        <input type="password" id="password" name="password" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                               placeholder="••••••••">
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input id="remember-me" name="remember-me" type="checkbox"
+                                   class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            <label for="remember-me" class="ml-2 block text-sm text-gray-700">Запомнить меня</label>
+                        </div>
+
+                        <a href="/forgot-password.html" class="text-sm text-blue-600 hover:text-blue-800">Забыли пароль?</a>
+                    </div>
+
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium transition flex items-center justify-center gap-2">
+                        <i data-feather="log-in" class="w-5 h-5"></i>
+                        Войти
+                    </button>
+                </form>
+
+                <div class="mt-6 text-center">
+                    <p class="text-sm text-gray-600">Ещё нет аккаунта?
+                        <a href="/register.html" class="text-blue-600 font-medium hover:text-blue-800">Зарегистрироваться</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            feather.replace();
+
+            document.getElementById('login-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const phone = document.getElementById('phone').value;
+                const password = document.getElementById('password').value;
+                const rememberMe = document.getElementById('remember-me').checked;
+
+                try {
+                    // Здесь должен быть API запрос для входа
+                    // const response = await makeApiRequest('auth/login', 'POST', { phone, password });
+
+                    // Для демонстрации используем моковые данные
+                    const mockResponse = {
+                        token: 'mock-jwt-token',
+                        role: 'client',
+                        user: {
+                            id: 1,
+                            name: 'Иван Иванов',
+                            phone: phone
+                        }
+                    };
+
+                    localStorage.setItem('token', mockResponse.token);
+                    localStorage.setItem('role', mockResponse.role);
+                    localStorage.setItem('user', JSON.stringify(mockResponse.user));
+
+                    if (rememberMe) {
+                        localStorage.setItem('rememberMe', 'true');
+                    }
+
+                    // Перенаправляем на главную
+                    window.location.href = '/';
+
+                } catch (error) {
+                    showToast('Ошибка входа. Проверьте данные.', 'error');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
